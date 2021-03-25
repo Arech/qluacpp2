@@ -1,0 +1,8 @@
+[submodule "contrib/luacpp"]
+	path = contrib/luacpp
+	url = https://github.com/elelel/luacpp
+	branch = master
+        
+[submodule "contrib/Catch"]
+	path = contrib/Catch
+	url = https://github.com/philsquared/Catch.git
