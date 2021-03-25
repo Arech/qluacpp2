@@ -108,7 +108,7 @@ namespace lua {
     }
 
     // Call functions
-    template <typename callback_t,
+    /*template <typename callback_t,
               typename... Args>
     inline void call_and_apply(callback_t f,
                                const int n_result,
@@ -128,7 +128,33 @@ namespace lua {
         throw std::runtime_error(std::string("Luacpp call_and_apply error: ") + name
                                  + " is not a function name in Lua global list, can't pcall");
       }
-    }
+    }*/
+
+	//////////////////////////////////////////////////////////////////////////
+	//#Arech
+	template <typename callback_t, typename... Args>
+	inline void call_and_apply(callback_t&& f,
+			const int n_result,
+			const char* name, Args&&... args) const
+	{
+		getglobal(name);
+		if (isfunction(-1)) {
+			push_variadic(std::forward<Args>(args)...);
+			int rc = pcall(sizeof...(args), n_result, 0);
+			if (rc == 0) {
+				int correct_stack_size = ::std::forward<callback_t>(f)(*this);
+				pop(correct_stack_size);
+			} else {
+				throw std::runtime_error(std::string("Luacpp call_and_apply error: call to ")
+					+ name + " failed with error " + std::to_string(rc));
+			}
+		} else {
+			throw std::runtime_error(std::string("Luacpp call_and_apply error: ") + name
+				+ " is not a function name in Lua global list, can't pcall");
+		}
+	}
+	//////////////////////////////////////////////////////////////////////////
+
     
     template <typename return_tuple_t, typename... Args>
     inline return_tuple_t call(const char* name, Args&&... args) const {

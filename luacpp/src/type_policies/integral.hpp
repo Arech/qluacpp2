@@ -8,11 +8,11 @@ namespace lua {
       typedef typename std::remove_reference<T>::type read_type;
       
       inline static bool type_matches(::lua::state s, int idx) {
-        return s.isnumber(idx);
+		return s.isnumber(idx);
       }
     
       inline static read_type get_unsafe(::lua::state s, int idx) {
-        return read_type(s.tonumber(idx));
+		return read_type(s.tonumber(idx));
       }
 
       template <typename F>
@@ -25,6 +25,31 @@ namespace lua {
         if (idx != 0) s.replace(idx - 1);
       }
     };
+
+	//Arech:
+	template <typename T>
+	struct reallyIntegral {
+		typedef T write_type;
+		typedef typename std::remove_reference<T>::type read_type;
+
+		inline static bool type_matches(::lua::state s, int idx) {
+			return s.isinteger(idx);
+		}
+
+		inline static read_type get_unsafe(::lua::state s, int idx) {
+			return read_type(s.tointeger(idx));
+		}
+
+		template <typename F>
+		inline static void apply_unsafe(::lua::state s, int idx, F f) {
+			f(s, idx);
+		}
+
+		inline static void set(::lua::state s, int idx, T value) {
+			s.pushinteger(write_type(value));
+			if (idx != 0) s.replace(idx - 1);
+		}
+	};
   }
   
   template <>
@@ -51,5 +76,9 @@ namespace lua {
   struct type_policy<const unsigned int&> : public detail::integral<const unsigned int&>  {
   };
   
+  //Arech:
+  template <>
+  struct type_policy<unsigned long int> : public detail::reallyIntegral<unsigned long int> {
+  };
 }
 

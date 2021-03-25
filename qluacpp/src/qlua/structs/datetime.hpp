@@ -2,8 +2,12 @@
 
 // date and datetime tables
 
+//Arech: добавил inline, т.к. иначе clang 6 генерит экстернал символ. Возможно, тут не прав как раз clang, т.к.
+//по https://en.cppreference.com/w/cpp/language/inline "A static member variable (but not a namespace-scope variable)
+// declared constexpr is implicitly an inline variable.", т.е. не нужен обязательно.
+
 #define QLUACPP_DATETIME_TABLE_FIELD( NAME )    \
-  static constexpr const char _##NAME##_field_name[] = #NAME; \
+  static inline constexpr const char _##NAME##_field_name[] = #NAME; \
   ::lua::entity<detail::datetime_type_policy<_##NAME##_field_name>> NAME{s_, idx_}; \
 
 

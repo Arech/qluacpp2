@@ -42,7 +42,9 @@ static void thread_safe_exec(const lua::state& l,
       }
 
       if (l.istable(-1)) {
-        auto len = luaL_getn(l.C_state(), -1);
+		  //Arech: апдейт на 5.3
+        //auto len = luaL_getn(l.C_state(), -1);
+		auto len = lua_rawlen(l.C_state(), -1);
         if (len == 2) {
           l.getglobal(function_name_in_lua.c_str());
           ++i;

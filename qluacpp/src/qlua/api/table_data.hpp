@@ -2,6 +2,7 @@
 
 
 // getItem - Функция возвращает таблицу Lua, содержащую информацию о данных из строки с номером «Index» из таблицы с именем «TableName». 
+/*
 template <typename Table>
 void getItem(unsigned int Index,
              std::function<void(const ::lua::entity<::lua::type_policy<Table>>&)> lambda) const {
@@ -11,7 +12,53 @@ void getItem(unsigned int Index,
     return 1;
   };
   l_.call_and_apply(f, 1, "getItem", ::qlua::table::detail::name_for_type<Table>::value(), Index);                                     
+}*/
+
+//////////////////////////////////////////////////////////////////////////
+//#Arech
+/*
+template <typename Table>
+void getItem2(unsigned int Index,
+	std::function<void(const ::lua::entity<::lua::type_policy<Table>>&)> lambda) const
+{
+	l_.call_and_apply2([&lambda](const ::lua::state& s) {
+		auto v = s.at<Table>(-1);
+		lambda(v);
+		return 1;
+	}, 1, "getItem", ::qlua::table::detail::name_for_type<Table>::value(), Index
+		);
 }
+
+template <typename Table, typename FuncT>
+void getItem3(unsigned int Index, FuncT&& lambda) const
+{
+	l_.call_and_apply2([&lambda](const ::lua::state& s) {
+		auto v = s.at<Table>(-1);
+		::std::forward<FuncT>(lambda)(v);
+		return 1;
+	}, 1, "getItem", ::qlua::table::detail::name_for_type<Table>::value(), Index
+		);
+}
+template <typename Table, typename FuncT>
+void getItem4(unsigned int Index, FuncT&& lambda) const
+{
+	l_.call_and_apply2([&lambda](const ::lua::state& s) {
+		::std::forward<FuncT>(lambda)(s.at<Table>(-1));
+		return 1;
+	}, 1, "getItem", ::qlua::table::detail::name_for_type<Table>::value(), Index
+		);
+}*/
+template <typename Table, typename FuncT>
+void getItem(unsigned int Index, FuncT&& lambda) const
+{
+	l_.call_and_apply([&lambda](const ::lua::state& s) {
+		::std::forward<FuncT>(lambda)(s.at<Table>(-1));
+		return 1;
+	}, 1, "getItem", ::qlua::table::detail::name_for_type<Table>::value(), Index
+		);
+}
+//////////////////////////////////////////////////////////////////////////
+
 
 /* TODO: tuple
 // getOrderByNumber - Функция возвращает таблицу Lua, содержащую описание параметров Таблицы заявок и индекс заявки в хранилище терминала. 

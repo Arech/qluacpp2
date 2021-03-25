@@ -1,6 +1,18 @@
 #pragma once
 
+//Arech:
+#ifdef T18_USE_STD_OPTIONAL
+
 #include <optional>
+
+#else //#ifdef T18_USE_STD_OPTIONAL
+#include <boost/optional.hpp>
+
+namespace std {
+	template <typename T>
+	using optional = ::boost::optional<T>;
+}
+#endif //#ifdef T18_USE_STD_OPTIONAL
 
 namespace lua {
   namespace detail {

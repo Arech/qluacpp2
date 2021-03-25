@@ -102,6 +102,9 @@ namespace lua {
                                     const char*, s)
     LUACPP_DETAIL_NATIVE_STATE_API4(void, pushnumber,
                                     lua_Number, n)
+	//Arech:
+	LUACPP_DETAIL_NATIVE_STATE_API4(void, pushinteger,
+			lua_Integer, n)
     LUACPP_DETAIL_NATIVE_STATE_API4(void, pushboolean,
                                     int, n)
     LUACPP_DETAIL_NATIVE_STATE_API6(void, pushcclosure,
@@ -131,6 +134,9 @@ namespace lua {
                                     int, idx)
     LUACPP_DETAIL_NATIVE_STATE_API4(int, isnumber,
                                     int, idx)
+	//Arech:
+	LUACPP_DETAIL_NATIVE_STATE_API4(int, isinteger,
+			int, idx)
     LUACPP_DETAIL_NATIVE_STATE_API4(int, istable,
                                     int, idx)
     LUACPP_DETAIL_NATIVE_STATE_API4(int, isstring,
@@ -148,6 +154,9 @@ namespace lua {
     
     LUACPP_DETAIL_NATIVE_STATE_API4(lua_Number, tonumber,
                                     int, idx)
+	//Arech:
+	LUACPP_DETAIL_NATIVE_STATE_API4(lua_Integer, tointeger,
+			int, idx)
     LUACPP_DETAIL_NATIVE_STATE_API4(const char*, tostring,
                                     int, idx)
     LUACPP_DETAIL_NATIVE_STATE_API4(int, toboolean,
